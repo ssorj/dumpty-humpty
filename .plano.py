@@ -1,19 +1,17 @@
 from dump import *
 from kubernetes import *
 
+kubeconfig = KubeConfig()
+
 @command
 def run_():
     remove("output")
 
+    collect_versions("output", kubeconfig)
+    collect_resources("output", kubeconfig)
+    collect_logs("output", kubeconfig)
+
+@command
+def dev():
     kubeconfig = KubeConfig()
-    connector = kubeconfig.get_cluster_connector()
-    current_namespace = kubeconfig.get_namespace()
-
-    collect_resources("output", connector, ("skupper", current_namespace))
-    collect_logs("output", connector, ("skupper", current_namespace))
-
-# @command
-# def dev():
-#     kubeconfig = KubeConfig()
-#     connector = kubeconfig.get_cluster_connector("skewer")
-#     current_namespace = kubeconfig.get_current_namespace("skewer")
+    print(api_get(kubeconfig.connector, "/version"))

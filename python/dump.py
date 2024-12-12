@@ -1,7 +1,16 @@
 from kubernetes import *
 from plano import *
 
-def collect_resources(output_dir, connector, namespaces):
+def collect_versions(output_dir, kubeconfig):
+    connector = kubeconfig.connector
+
+    touch(f"{output_dir}/versions/skupper.yaml")
+    write_yaml(f"{output_dir}/versions/kubernetes.yaml", api_get_json(connector, "/version"))
+
+def collect_resources(output_dir, kubeconfig):
+    connector = kubeconfig.connector
+    namespaces = "skupper", kubeconfig.namespace
+
     # Exclude some resource types
     def resource_type_excluded(resource_type):
         # Exclude resources that are not namespaced
@@ -74,7 +83,10 @@ def collect_resources(output_dir, connector, namespaces):
 
                 write_yaml(output_file, resource)
 
-def collect_logs(output_dir, connector, namespaces):
+def collect_logs(output_dir, kubeconfig):
+    connector = kubeconfig.connector
+    namespaces = "skupper", kubeconfig.namespace
+
     for namespace in namespaces:
         pods = api_get_json(connector, f"/api/v1/namespaces/{namespace}/pods")
 
