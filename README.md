@@ -20,8 +20,8 @@
 ## Dump file content
 
 ~~~
-index.md
-index.html
+report.md
+report.html
 versions/
   kubernetes.yaml
   kubernetes.yaml.txt
@@ -43,8 +43,8 @@ controller-namespace/
 
 #### `report.md`
 
-A consolidated report highlight potential problems.  This is not yet
-specced out.
+A consolidated report highlighting potential problems.  This is not
+yet specced out.
 
 #### `versions/kubernetes.yaml`
 
