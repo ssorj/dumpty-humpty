@@ -41,12 +41,12 @@ controller-namespace/
   controller-<id>-log.txt
 ~~~
 
-### `report.md`
+#### `report.md`
 
 A consolidated report highlight potential problems.  This is not yet
 specced out.
 
-### `versions/kubernetes.yaml`
+#### `versions/kubernetes.yaml`
 
 Kube API: `/version`
 
