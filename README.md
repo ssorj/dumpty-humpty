@@ -42,13 +42,13 @@ versions/
   kubernetes.yaml.txt
   skupper.yaml
   skupper.yaml.txt
-site-namespace/        # Events, resources, and logs for the current site's namespace
+site-namespace/
   events.yaml
   events.yaml.txt
   resources/<kind>-<name>.yaml
   resources/<kind>-<name>.yaml.txt
   logs/<pod-name>-<container-name>.txt
-controller-namespace/  # Events, resources, and logs for the controller namespace (if not in the site namespace)
+controller-namespace/
   events.yaml
   events.yaml.txt
   resources/<kind>-<name>.yaml
