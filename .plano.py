@@ -5,9 +5,15 @@ from kubernetes import *
 def run_():
     remove("output")
 
-    context = "skewer"
-    kubeconfig = parse_yaml(call("kubectl config view"))
-    connector = get_cluster_connector(context, kubeconfig)
-    namespaces = "skupper", get_current_namespace(context, kubeconfig)
+    kubeconfig = KubeConfig()
+    connector = kubeconfig.get_cluster_connector()
+    current_namespace = kubeconfig.get_namespace()
 
-    collect_resources("output", connector, namespaces)
+    collect_resources("output", connector, ("skupper", current_namespace))
+    collect_logs("output", connector, ("skupper", current_namespace))
+
+# @command
+# def dev():
+#     kubeconfig = KubeConfig()
+#     connector = kubeconfig.get_cluster_connector("skewer")
+#     current_namespace = kubeconfig.get_current_namespace("skewer")

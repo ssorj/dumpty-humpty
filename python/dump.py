@@ -1,11 +1,7 @@
+from kubernetes import *
 from plano import *
 
 def collect_resources(output_dir, connector, namespaces):
-    # Get data from the Kube API
-    def api_get(path):
-        return http_get_json(f"{connector.server_url}{path}", server_cert=connector.server_cert,
-                             client_cert=connector.client_cert, client_key=connector.client_key)
-
     # Exclude some resource types
     def resource_type_excluded(resource_type):
         # Exclude resources that are not namespaced
@@ -33,7 +29,7 @@ def collect_resources(output_dir, connector, namespaces):
     resource_paths = list()
 
     # Get access info for the core resources
-    for resource_type in api_get("/api/v1")["resources"]:
+    for resource_type in api_get_json(connector, "/api/v1")["resources"]:
         if resource_type_excluded(resource_type):
             continue
 
@@ -44,10 +40,11 @@ def collect_resources(output_dir, connector, namespaces):
         resource_paths.append((kind, path))
 
     # Get access info for resources from the API groups
-    for api_group in api_get("/apis")["groups"]:
+    for api_group in api_get_json(connector, "/apis")["groups"]:
+        # XXX This needs to be every version!
         group_version = api_group["preferredVersion"]["groupVersion"]
 
-        for resource_type in api_get(f"/apis/{group_version}")["resources"]:
+        for resource_type in api_get_json(connector, f"/apis/{group_version}")["resources"]:
             if resource_type_excluded(resource_type):
                 continue
 
@@ -62,7 +59,7 @@ def collect_resources(output_dir, connector, namespaces):
         for namespace in namespaces:
             kind, path = resource_path
             path = path.replace("@namespace@", namespace)
-            resources = api_get(path)
+            resources = api_get_json(connector, path)
 
             for resource in resources["items"]:
                 if resource_excluded(resource):
@@ -76,3 +73,17 @@ def collect_resources(output_dir, connector, namespaces):
                     del resource["metadata"]["managedFields"]
 
                 write_yaml(output_file, resource)
+
+def collect_logs(output_dir, connector, namespaces):
+    for namespace in namespaces:
+        pods = api_get_json(connector, f"/api/v1/namespaces/{namespace}/pods")
+
+        for pod in pods["items"]:
+            name = pod["metadata"]["name"]
+            containers = [x["name"] for x in pod["spec"]["containers"]]
+
+            for container in containers:
+                output_file = f"{output_dir}/logs/{namespace}/{name}-{container}.txt"
+                log = api_get(connector, f"/api/v1/namespaces/{namespace}/pods/{name}/log?container={container}")
+
+                write(output_file, log)
