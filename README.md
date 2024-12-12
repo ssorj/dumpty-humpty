@@ -3,8 +3,9 @@
 ## Theses
 
 - Logs are included only for pods with names starting with "skupper-".
+  User application logs are excluded.
 - All resource kinds are included, except Secrets, AccessGrants, and
-  AccessTokens.
+  AccessTokens.  We could do redactions instead.
 - All resource instances are included except those with names ending
   in ".crt".
 - The managedFields sutbree is pruned out of the resource YAML, since
@@ -12,7 +13,7 @@
 - YAML files have a copy with a .txt extension, so you can view them
   in a web browser.
 
-## Dump file name
+## Default dump file name
 
 `skupper-dump-<site-name>-<date>.tar.gz`
 
@@ -49,37 +50,37 @@ specced out.
 
 Kube API: `/version`
 
-### `versions/skupper.yaml`
+#### `versions/skupper.yaml`
 
 Same as the output of `skupper version --output yaml`.
 
-### `site-namespace/events.yaml`
+#### `site-namespace/events.yaml`
 
 Kube API: `/api/v1/namespaces/<site-namespace>/events`
 
-### `site-namespace/resources/<kind>-<name>.yaml`
+#### `site-namespace/resources/<kind>-<name>.yaml`
 
 Kube APIs:
 
  - `/api/v1/namespaces/<site-namespace>/<plural-name>`
  - `/apis/<group-name>/<version>/namespaces/<site-namespace>/<plural-name>`
 
-### `site-namespace/logs/<pod-name>-<container-name>.txt`
+#### `site-namespace/logs/<pod-name>-<container-name>.txt`
 
 Kube API: `/api/v1/namespaces/<site-namespace>/pods/<pod-name>/log?container=<container-name>`
 
-### `controller-namespace/events.yaml`
+#### `controller-namespace/events.yaml`
 
 Kube API: `/api/v1/namespaces/skupper/events`
 
-### `controller-namespace/resources/<kind>-<name>.yaml`
+#### `controller-namespace/resources/<kind>-<name>.yaml`
 
 Kube APIs:
 
  - `/api/v1/namespaces/skupper/<plural-name>`
  - `/apis/<group-name>/<version>/namespaces/skupper/<plural-name>`
 
-### `controller-namespace/logs/<pod-name>-<container-name>.txt`
+#### `controller-namespace/logs/<pod-name>-<container-name>.txt`
 
 Kube API: `/api/v1/namespaces/skupper/pods/<pod-name>/log?container=<container-name>`
 
