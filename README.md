@@ -19,7 +19,22 @@
 
 ## Dump file content
 
+~~~ sh
+# A human-readable, browser-friendly report on the site
+report.md
+report.html
+
+# Platform and Skupper versions
+versions/
+
+# Events, resources, and logs for the current site
+site-namespace/
+
+# Events, resources, and logs for the cluster-level skupper namespace, if present
+controller-namespace/
 ~~~
+
+~~~ sh
 report.md
 report.html
 versions/
@@ -27,13 +42,13 @@ versions/
   kubernetes.yaml.txt
   skupper.yaml
   skupper.yaml.txt
-site-namespace/
+site-namespace/        # Events, resources, and logs for the current site's namespace
   events.yaml
   events.yaml.txt
   resources/<kind>-<name>.yaml
   resources/<kind>-<name>.yaml.txt
   logs/<pod-name>-<container-name>.txt
-controller-namespace/
+controller-namespace/  # Events, resources, and logs for the controller namespace (if not in the site namespace)
   events.yaml
   events.yaml.txt
   resources/<kind>-<name>.yaml
