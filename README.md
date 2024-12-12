@@ -5,7 +5,7 @@
 - Logs are included only for pods with names starting with "skupper-".
   User application logs are excluded.
 - All resource kinds are included, except Secrets, AccessGrants, and
-  AccessTokens.  We could do redactions instead.
+  AccessTokens (we could do redactions instead).
 - All resource instances are included except those with names ending
   in ".crt".
 - The managedFields sutbree is pruned out of the resource YAML, since
