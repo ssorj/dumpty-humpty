@@ -38,7 +38,7 @@ controller-namespace/
   events.yaml.txt
   resources/<kind>-<name>.yaml
   resources/<kind>-<name>.yaml.txt
-  controller-<id>-log.txt
+  logs/<pod-name>-<container-name>.txt
 ~~~
 
 #### `report.md`
