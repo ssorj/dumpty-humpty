@@ -1,5 +1,9 @@
 # Dumpty Humpty
 
+## New theses
+
+- Capture all Skupper resource types
+
 ## Theses
 
 - Logs are included only for pods with names starting with "skupper-".

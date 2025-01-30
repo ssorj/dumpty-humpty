@@ -1,7 +1,7 @@
 from collections import namedtuple as _namedtuple
 from plano import *
 
-class KubeConfig:
+class Kubeconfig:
     def __init__(self):
         if "KUBECONFIG" in ENV:
             self.data = read_yaml(ENV["KUBECONFIG"])

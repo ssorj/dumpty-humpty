@@ -32,17 +32,17 @@ def collect_resources(output_dir, kubeconfig):
         if "get" not in resource_type["verbs"]:
             return True
 
-        # Exclude resources that contain sensitive information
-        if resource_type["kind"] in ("Secret", "AccessGrant", "AccessToken"):
-            return True
+        # # Exclude resources that contain sensitive information
+        # if resource_type["kind"] in ("Secret", "AccessGrant", "AccessToken"):
+        #     return True
 
     # Exclude some resources
     def resource_excluded(resource):
-        # Exclude resources that contain sensitive information
-        if resource["metadata"]["name"].endswith(".crt"):
-            return True
+        # # Exclude resources that contain sensitive information
+        # if resource["metadata"]["name"].endswith(".crt"):
+        #     return True
 
-    resource_paths = list()
+        pass
 
     # Get access info for the core resources
     for resource_type in api_get_json(kubeconfig.connector, "/api/v1")["resources"]:
@@ -51,9 +51,19 @@ def collect_resources(output_dir, kubeconfig):
 
         kind = resource_type["kind"]
         name = resource_type["name"]
-        path = f"/api/v1/namespaces/@namespace@/{name}"
 
-        resource_paths.append((kind, path))
+        for namespace in (kubeconfig.namespace, "skupper"):
+            path = f"/api/v1/namespaces/{namespace}/{name}"
+
+            # pprint(api_get_json(kubeconfig.connector, path))
+
+            for resource_list in api_get_json(kubeconfig.connector, path).values():
+                # pprint(resource_list)
+                print(resource_list["kind"])
+
+    return
+
+    # resource_paths = list()
 
     # Get access info for resources from the API groups
     for api_group in api_get_json(kubeconfig.connector, "/apis")["groups"]:
@@ -99,10 +109,6 @@ def collect_resources(output_dir, kubeconfig):
 
             name = resource["metadata"]["name"]
             output_file = f"{output_dir}/controller-namespace/resources/{kind}-{name}.yaml"
-
-            # Prune the noisy and unhelpful managedField data
-            if "managedFields" in resource["metadata"]:
-                del resource["metadata"]["managedFields"]
 
             write_yaml(output_file, resource)
 
